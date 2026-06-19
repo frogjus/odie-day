@@ -24,6 +24,13 @@ const fmt = (ms) => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 
 function startTimer() { startMs = Date.now(); timerEl.textContent = "0:00"; timerId = setInterval(() => (timerEl.textContent = fmt(Date.now() - startMs)), 1000); }
 function stopTimer() { clearInterval(timerId); timerId = null; }
 
+// cap the prompt at 100 words
+const MAX_WORDS = 100;
+dayEl.addEventListener("input", () => {
+  const words = dayEl.value.split(/\s+/).filter(Boolean);
+  if (words.length > MAX_WORDS) dayEl.value = words.slice(0, MAX_WORDS).join(" ") + " ";
+});
+
 function setStage(name) {
   const s = STAGES[name] || { pct: 60, copy: "Working…" };
   statusLine.textContent = s.copy;
