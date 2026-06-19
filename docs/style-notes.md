@@ -68,10 +68,10 @@ Reference media_ids used in the proof (MCP, for reuse this session):
 
 ## REST API findings (live debugging, 2026-06-19)
 
-- **Auth was swapped.** Correct header: `Authorization: Key {UUID}:{HEX}` — the UUID
-  `42f8d5f0-…` is the api_key, the long hex `0e000…` is the secret. (No-auth → 401;
-  any `Key …` header with wrong order/secret → 500, which masked the real problem.)
-  `.env` corrected: HIGGSFIELD_API_KEY=UUID, HIGGSFIELD_API_SECRET=HEX.
+- **Auth was swapped.** Correct header: `Authorization: Key {API_KEY}:{API_SECRET}` —
+  the UUID-form value is the api_key and the long hex value is the secret (not the other
+  way round). (No-auth → 401; any `Key …` header with wrong order/secret → 500, which
+  masked the real problem.) (Higgsfield is no longer used — superseded by Gemini.)
 - **No GET model catalog** on platform.higgsfield.ai (all GETs → 405; POST-only
   `/{model_id}` router). Full catalog lives in the authed Cloud gallery.
 - **Valid REST image models found:** `higgsfield-ai/soul/standard` (text2img),
