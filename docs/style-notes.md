@@ -65,3 +65,24 @@ Reference media_ids used in the proof (MCP, for reuse this session):
 - Odie character: `a73d7f5e-8aaa-42b7-97b1-c8bcaf3b54ae`
 - Art-style ref:  `d52147f3-91a2-4210-8c0c-9075925661b5`
 - Notebook bg:    `613860e6-786f-4144-96f2-541ff333fa6f`
+
+## REST API findings (live debugging, 2026-06-19)
+
+- **Auth was swapped.** Correct header: `Authorization: Key {UUID}:{HEX}` — the UUID
+  `42f8d5f0-…` is the api_key, the long hex `0e000…` is the secret. (No-auth → 401;
+  any `Key …` header with wrong order/secret → 500, which masked the real problem.)
+  `.env` corrected: HIGGSFIELD_API_KEY=UUID, HIGGSFIELD_API_SECRET=HEX.
+- **No GET model catalog** on platform.higgsfield.ai (all GETs → 405; POST-only
+  `/{model_id}` router). Full catalog lives in the authed Cloud gallery.
+- **Valid REST image models found:** `higgsfield-ai/soul/standard` (text2img),
+  `higgsfield-ai/soul/reference` (reference-conditioned), `higgsfield-ai/soul/character`
+  (trained soul_id), `reve/text-to-image`. Soul path = `higgsfield-ai/soul/{mode}`,
+  mode ∈ reference|character|standard.
+- **soul/reference REST test** (with `reference_images:[url]` + doodle prompt) → produced
+  a doodle, BUT a monochrome PENCIL sketch of a generic kid on a 3D spiral notebook on a
+  desk (`samples/rest_soul_ref.png`). Doodle-ish but NOT on-model Odie and not flat
+  full-frame paper. Inferior to the MCP Nano Banana Pro result.
+- **Open item:** find the REST slug for **Nano Banana Pro** (the MCP winner). Guesses
+  google/nano-banana[-pro][/edit], higgsfield-ai/nano-banana → all 404. The exact API
+  model_id is in the Cloud gallery (cloud.higgsfield.ai). Kling turbo slug also not found;
+  documented working video slug is `kling-video/v2.1/pro/image-to-video`.
