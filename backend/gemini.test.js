@@ -5,14 +5,15 @@ import { generateKeyframe, animate } from "./gemini.js";
 const ok = (body) => ({ ok: true, json: async () => body });
 
 test("generateKeyframe posts to Nano Banana Pro and returns image bytes", async () => {
-  let calledUrl, calledBody;
+  let calledUrl, calledBody, calledHeaders;
   const pngB64 = Buffer.from("fake-png-bytes").toString("base64");
   const fetchImpl = async (url, opts) => {
-    calledUrl = url; calledBody = JSON.parse(opts.body);
+    calledUrl = url; calledBody = JSON.parse(opts.body); calledHeaders = opts.headers;
     return ok({ candidates: [{ content: { parts: [{ inlineData: { data: pngB64 } }] } }] });
   };
   const buf = await generateKeyframe("a girl jumping in a puddle", { apiKey: "K", fetchImpl });
-  assert.match(calledUrl, /gemini-3-pro-image:generateContent\?key=K/);
+  assert.match(calledUrl, /gemini-3-pro-image:generateContent$/);
+  assert.equal(calledHeaders["x-goog-api-key"], "K");
   assert.equal(calledBody.generationConfig.imageConfig.aspectRatio, "16:9");
   assert.ok(Buffer.isBuffer(buf));
   assert.equal(buf.toString(), "fake-png-bytes");

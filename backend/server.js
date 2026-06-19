@@ -31,7 +31,10 @@ export function createApp({ store }) {
     res.json(job);
   });
   app.use("/clips", express.static(path.join(ROOT, "backend", "clips")));
-  app.use("/assets", express.static(path.join(ROOT, "assets")));
+  // no-cache on assets too, so regenerated art (cursor, decorations) is always fresh
+  app.use("/assets", express.static(path.join(ROOT, "assets"), {
+    setHeaders: (res) => res.setHeader("Cache-Control", "no-cache"),
+  }));
   // no-cache for the app shell so updated html/css/js are always served fresh
   app.use("/", express.static(path.join(ROOT, "frontend"), {
     setHeaders: (res) => res.setHeader("Cache-Control", "no-cache"),

@@ -38,9 +38,9 @@ export async function generateKeyframe(scenePrompt, { apiKey, refImagePaths = []
     contents: [{ parts }],
     generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: "16:9" } },
   };
-  const res = await fetchImpl(`${BASE}/models/${IMAGE_MODEL}:generateContent?key=${apiKey}`, {
+  const res = await fetchImpl(`${BASE}/models/${IMAGE_MODEL}:generateContent`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`Gemini image failed: ${res.status} ${await res.text()}`);
@@ -60,9 +60,9 @@ export async function animate(imageBuffer, { apiKey, fetchImpl = fetch,
     instances: [{ prompt: MOTION_PROMPT, image: { bytesBase64Encoded: imageBuffer.toString("base64"), mimeType: "image/jpeg" } }],
     parameters: { aspectRatio: "16:9" },
   };
-  const sub = await fetchImpl(`${BASE}/models/${VIDEO_MODEL}:predictLongRunning?key=${apiKey}`, {
+  const sub = await fetchImpl(`${BASE}/models/${VIDEO_MODEL}:predictLongRunning`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
     body: JSON.stringify(body),
   });
   if (!sub.ok) throw new Error(`Veo submit failed: ${sub.status} ${await sub.text()}`);
@@ -70,7 +70,7 @@ export async function animate(imageBuffer, { apiKey, fetchImpl = fetch,
   if (!op.name) throw new Error(`No Veo operation name: ${JSON.stringify(op).slice(0, 200)}`);
 
   for (let i = 0; i < maxTries; i++) {
-    const r = await fetchImpl(`${BASE}/${op.name}?key=${apiKey}`);
+    const r = await fetchImpl(`${BASE}/${op.name}`, { headers: { "x-goog-api-key": apiKey } });
     if (!r.ok) throw new Error(`Veo poll failed: ${r.status}`);
     const o = await r.json();
     if (o.done) {
