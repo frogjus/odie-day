@@ -1,11 +1,9 @@
-// Odie Day generation via Google's Gemini API (source of "Nano Banana"):
-//   keyframe = Nano Banana Pro (gemini-3-pro-image), animation = Veo 3.1.
-// Proven 2026-06-19 to hold the Odie crayon-doodle style end-to-end. See docs/style-notes.md.
+// Odie Day keyframe generation via Google's Gemini API ("Nano Banana Pro").
+// Animation is handled separately by Vidu Q3 Pro (see backend/vidu.js).
 import fs from "node:fs";
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta";
 const IMAGE_MODEL = "gemini-3-pro-image";              // Nano Banana Pro
-const VIDEO_MODEL = "veo-3.1-generate-preview";        // Veo 3.1 (premium, non-fast) — cleaner frames
 
 // Locked style prompt. Tuned to match the actual Odie IP — a clean, finished cartoon
 // (even confident inking, flat cel coloring), NOT a scribbly/crayon doodle.
@@ -18,14 +16,6 @@ export const STYLE_PREFIX =
   "the reference character exactly. NOT photorealistic, NOT 3D. Place her on the crinkled white lined " +
   "NOTEBOOK PAPER (blue ruled lines, red margin) as a clean cartoon drawn on the page, Odie centered " +
   "with room around her. Scene: ";
-
-// Locked motion prompt for Veo. Framed as animating a flat 2D cartoon DRAWING (not a
-// real person) — this keeps the doodle style AND avoids Veo's people/child RAI filter.
-export const MOTION_PROMPT =
-  "A clean flat 2D cartoon animation (like a modern 2D animated show) gently comes to life: the " +
-  "character moves naturally with subtle, smooth motion and small shifting details. Keep the EXACT " +
-  "clean cartoon style and the lined notebook paper exactly as in the source image — it is a flat 2D " +
-  "drawing, not a real person. No 3D, no photographic realism, no style change. Camera stays still.";
 
 // Nano Banana Pro keyframe. Returns image bytes (Buffer). refImagePaths are local PNGs
 // (Odie character + art-style + notebook bg) inlined as references.
@@ -50,39 +40,4 @@ export async function generateKeyframe(scenePrompt, { apiKey, refImagePaths = []
   if (!img) throw new Error(`No image in Gemini response: ${JSON.stringify(data).slice(0, 300)}`);
   const d = img.inlineData || img.inline_data;
   return Buffer.from(d.data, "base64");
-}
-
-// Veo image-to-video. imageBuffer = keyframe bytes; action describes the motion.
-// Returns video bytes (Buffer). Veo is long-running: submit -> poll operation -> download.
-export async function animate(imageBuffer, { apiKey, fetchImpl = fetch,
-  sleep = (ms) => new Promise((r) => setTimeout(r, ms)), intervalMs = 10000, maxTries = 60 } = {}) {
-  const body = {
-    instances: [{ prompt: MOTION_PROMPT, image: { bytesBase64Encoded: imageBuffer.toString("base64"), mimeType: "image/jpeg" } }],
-    parameters: { aspectRatio: "16:9" },
-  };
-  const sub = await fetchImpl(`${BASE}/models/${VIDEO_MODEL}:predictLongRunning`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-    body: JSON.stringify(body),
-  });
-  if (!sub.ok) throw new Error(`Veo submit failed: ${sub.status} ${await sub.text()}`);
-  const op = await sub.json();
-  if (!op.name) throw new Error(`No Veo operation name: ${JSON.stringify(op).slice(0, 200)}`);
-
-  for (let i = 0; i < maxTries; i++) {
-    const r = await fetchImpl(`${BASE}/${op.name}`, { headers: { "x-goog-api-key": apiKey } });
-    if (!r.ok) throw new Error(`Veo poll failed: ${r.status}`);
-    const o = await r.json();
-    if (o.done) {
-      if (o.error) throw new Error(`Veo failed: ${JSON.stringify(o.error)}`);
-      const uri = o.response?.generateVideoResponse?.generatedSamples?.[0]?.video?.uri;
-      if (!uri) throw new Error(`No Veo video uri: ${JSON.stringify(o.response).slice(0, 300)}`);
-      // Download requires header auth (the ?key= query 302s on the file endpoint).
-      const dl = await fetchImpl(uri, { headers: { "x-goog-api-key": apiKey } });
-      if (!dl.ok) throw new Error(`Veo download failed: ${dl.status}`);
-      return Buffer.from(await dl.arrayBuffer());
-    }
-    await sleep(intervalMs);
-  }
-  throw new Error("Veo generation timed out");
 }

@@ -14,6 +14,8 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
+      - key: VIDU_API_KEY
+        sync: false
       - key: ELEVENLABS_API_KEY
         sync: false
       - key: ODIE_VOICE_ID

@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 import { loadConfig } from "./config.js";
 import { createJobStore } from "./jobs.js";
 import { writeScript } from "./scriptwriter.js";
-import { generateKeyframe, animate } from "./gemini.js";
+import { generateKeyframe } from "./gemini.js";
+import { animate } from "./vidu.js";
 import { synthesize } from "./voice.js";
 import { muxClip } from "./mux.js";
 

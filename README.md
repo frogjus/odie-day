@@ -13,7 +13,7 @@ on a crinkled notebook page, with a little wait-game to play while it renders.
 your day
   → Claude            writes a short first-person "Odie" line + a scene
   → Nano Banana Pro   (Gemini) draws Odie acting it out on notebook paper
-  → Veo 3.1           (Gemini) animates that keyframe into a ~clip
+  → Vidu Q3 Pro       animates that keyframe into a short clip (image-to-video)
   → ElevenLabs        narrates the line in Odie's voice
   → ffmpeg            muxes the voice onto the clip → mp4
 ```
@@ -25,7 +25,7 @@ a live timer, and a Chrome-dino-style **Odie runner** mini-game while you wait.
 
 - **Backend:** Node 18+ / Express, `@anthropic-ai/sdk`, `ffmpeg-static`
 - **Frontend:** vanilla HTML/CSS/JS (notebook-paper UI, canvas mini-game)
-- **AI:** Anthropic Claude · Google Gemini (Nano Banana Pro image + Veo 3.1 video) · ElevenLabs TTS
+- **AI:** Anthropic Claude · Google Gemini (Nano Banana Pro keyframe) · Vidu Q3 Pro (image-to-video) · ElevenLabs TTS
 - **Tests:** built-in `node:test` (run with `npm test`)
 
 ## Run it
@@ -41,12 +41,14 @@ npm start                 # http://localhost:3000
 | Var | What |
 |-----|------|
 | `ANTHROPIC_API_KEY` | Claude — the scriptwriter step |
-| `GEMINI_API_KEY` | Google Gemini — Nano Banana Pro (image) + Veo (video) |
+| `GEMINI_API_KEY` | Google Gemini — Nano Banana Pro (keyframe) |
+| `VIDU_API_KEY` | Vidu — Q3 Pro image-to-video (animation) |
+| `PUBLIC_BASE_URL` | app's public URL (Vidu fetches the keyframe by URL); Render auto-provides `RENDER_EXTERNAL_URL` |
 | `ELEVENLABS_API_KEY` | ElevenLabs — Odie voice TTS |
 | `ODIE_VOICE_ID` | ElevenLabs voice id used for narration |
 | `PORT` / `DAILY_CLIP_CAP` | optional (defaults 3000 / 50) |
 
-The Gemini key needs a billed/paid project (Nano Banana Pro + Veo aren't free-tier).
+The Gemini key needs a billed/paid project (Nano Banana Pro isn't free-tier). Vidu is pay-per-second.
 
 ## Deploy (always-on)
 
@@ -55,7 +57,7 @@ The repo ships a `render.yaml` blueprint:
 1. Push to GitHub (done).
 2. On [Render](https://render.com): **New → Blueprint** → pick this repo (it reads `render.yaml`).
 3. Add the secret env vars in the dashboard: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`,
-   `ELEVENLABS_API_KEY`, `ODIE_VOICE_ID`. (`PORT` is injected automatically.)
+   `VIDU_API_KEY`, `ELEVENLABS_API_KEY`, `ODIE_VOICE_ID`. (`PORT` and `RENDER_EXTERNAL_URL` are injected automatically.)
 4. Deploy → you get a permanent `https://odie-day.onrender.com`-style URL.
 
 Railway works the same way (New → Deploy from repo → add the env vars; it runs `npm start`).

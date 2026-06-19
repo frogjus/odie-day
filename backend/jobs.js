@@ -6,15 +6,16 @@ export function createJobStore({ config, deps, clipsDir, refImagePaths = [] }) {
   let dayCount = 0; // simple per-process daily cap; reset on restart
 
   async function run(job, day) {
-    const gemini = { apiKey: config.geminiKey };
     try {
       job.status = "scripting";
       const { line, scenePrompt } = await deps.writeScript(day, { apiKey: config.anthropicKey });
       job.line = line;
       job.status = "drawing";
-      const imageBuffer = await deps.generateKeyframe(scenePrompt, { ...gemini, refImagePaths });
+      const imageBuffer = await deps.generateKeyframe(scenePrompt, { apiKey: config.geminiKey, refImagePaths });
       job.status = "animating";
-      const videoBuffer = await deps.animate(imageBuffer, { ...gemini });
+      const videoBuffer = await deps.animate(imageBuffer, {
+        apiKey: config.viduKey, publicBaseUrl: config.publicBaseUrl, clipsDir, id: job.id,
+      });
       job.status = "voicing";
       const mp3 = await deps.synthesize(line, { apiKey: config.elevenKey, voiceId: config.odieVoiceId });
       job.status = "muxing";
