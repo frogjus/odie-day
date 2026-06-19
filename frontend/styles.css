@@ -118,6 +118,14 @@ body {
 }
 @media (max-width: 820px) { .red-figures, .red-star { display: none; } }
 
+/* 'blow up hagwon' button doodle — right margin, clear of UI */
+.hagwon-deco {
+  position: fixed; right: 1.5%; top: 40%; width: clamp(120px, 12vw, 178px);
+  transform: rotate(-4deg); pointer-events: none; z-index: 1;
+  mix-blend-mode: multiply; opacity: .95;
+}
+@media (max-width: 1350px) { .hagwon-deco { display: none; } }
+
 /* 2) running-dog decoration */
 .dog-deco {
   position: fixed; left: 3%; bottom: 7%; width: clamp(165px, 20vw, 270px);

@@ -1,20 +1,23 @@
-// Tiny "Odie hop" — a Chrome-dino-style wait-game using the real Odie + pencil art.
-// Simple: click/space to start, then to jump. Exposes window.OdieGame.start()/.stop().
+// Tiny "Odie hop" — Chrome-dino-style wait-game using the real 4-frame Odie run
+// cycle + the pencil art. Click/space to start, then to jump.
+// Exposes window.OdieGame.start()/.stop().
 (function () {
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height, GROUND = H - 18;
 
-  const odie = new Image(); odie.src = "/assets/game/odie.png";
+  const run = [1, 2, 3, 4].map((n) => { const i = new Image(); i.src = `/assets/game/run${n}.png`; return i; });
   const pencil = new Image(); pencil.src = "/assets/game/pencil.png";
 
-  const PH = 64;                                   // Odie draw height (clearly visible)
-  const odieW = () => PH * (odie.naturalWidth && odie.naturalHeight ? odie.naturalWidth / odie.naturalHeight : 0.34);
+  const PH = 66;                                   // Odie draw height
+  const ref = run[0];
+  const odieW = () => PH * (ref.naturalWidth && ref.naturalHeight ? ref.naturalWidth / ref.naturalHeight : 0.72);
 
-  let st = null, raf = null, mode = "idle";        // idle | ready | run | over
+  let st = null, raf = null, mode = "idle", anim = 0;   // idle | ready | run | over
 
   function reset() {
     st = { y: GROUND - PH, vy: 0, onGround: true, obs: [], spawn: 45, score: 0, speed: 3.0 };
+    anim = 0;
   }
 
   function scene() {
@@ -23,9 +26,17 @@
     ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(W, GROUND); ctx.stroke();
   }
 
+  function currentFrame() {
+    if (mode === "run") {
+      if (!st.onGround) return run[1];               // a mid-stride pose while airborne
+      return run[Math.floor(anim / 5) % 4];          // run cycle on the ground
+    }
+    return run[0];                                    // ready / over
+  }
+
   function drawOdie() {
-    if (!odie.complete) return;
-    ctx.drawImage(odie, 30, st.y, odieW(), PH);
+    const f = currentFrame();
+    if (f && f.complete) ctx.drawImage(f, 28, st.y, odieW(), PH);
   }
 
   function drawObs() {
@@ -46,6 +57,7 @@
   function loop() {
     scene();
     if (mode === "run") {
+      anim++;
       st.vy += 0.52; st.y += st.vy;
       const rest = GROUND - PH;
       if (st.y >= rest) { st.y = rest; st.vy = 0; st.onGround = true; }
@@ -53,8 +65,7 @@
       if (--st.spawn <= 0) { st.obs.push({ x: W + 10, h: 30 + Math.random() * 16 }); st.spawn = 58 + Math.random() * 42; }
       st.obs.forEach((o) => (o.x -= st.speed));
       st.obs = st.obs.filter((o) => o.x > -40);
-      // collision: Odie's lower-center box vs pencil
-      const ox = 30 + odieW() * 0.28, ow = odieW() * 0.44;
+      const ox = 28 + odieW() * 0.3, ow = odieW() * 0.4;
       for (const o of st.obs) {
         const w = o.w || 7;
         if (ox < o.x + w * 0.7 && ox + ow > o.x + w * 0.2 && st.y + PH > GROUND - o.h + 3) { mode = "over"; }
