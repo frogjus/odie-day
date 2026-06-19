@@ -33,7 +33,7 @@ test("animate submits to Veo, polls the operation, and downloads the video bytes
     return { ok: true, arrayBuffer: async () => new TextEncoder().encode("mp4-bytes").buffer };
   };
   const buf = await animate(Buffer.from("keyframe"), { apiKey: "K", fetchImpl, sleep: async () => {} });
-  assert.ok(calls[0].includes("veo-3.1-fast-generate-preview:predictLongRunning"));
+  assert.ok(calls[0].includes("veo-3.1-generate-preview:predictLongRunning"));
   assert.ok(Buffer.isBuffer(buf) && buf.toString() === "mp4-bytes");
 });
 
