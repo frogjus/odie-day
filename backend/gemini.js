@@ -10,21 +10,22 @@ const VIDEO_MODEL = "veo-3.1-generate-preview";        // Veo 3.1 (premium, non-
 // Locked style prompt. Tuned to match the actual Odie IP — a clean, finished cartoon
 // (even confident inking, flat cel coloring), NOT a scribbly/crayon doodle.
 export const STYLE_PREFIX =
-  "Draw in the EXACT art style and character design of the reference images — a clean, finished " +
-  "children's CARTOON (like a modern 2D animated show): confident, even black ink outlines, simple " +
-  "flat cel coloring, tidy and on-model. Do NOT make it scribbly, crayon, sketchy, wobbly or a rough " +
-  "naive doodle. Character: \"Odie\", a young girl with a dark bob and straight bangs, round glasses, " +
-  "and a simple friendly cartoon face — match the reference character exactly. NOT photorealistic, " +
-  "NOT 3D. Place her on the crinkled white lined NOTEBOOK PAPER (blue ruled lines, red margin) as a " +
-  "clean cartoon drawn on the page, Odie centered with room around her. Scene: ";
+  "Draw in the EXACT art style and character design of the reference images — a clean, finished 2D " +
+  "CARTOON like a modern animated show: confident, even black ink outlines, flat cel coloring, polished " +
+  "and on-model. Do NOT make it scribbly, crayon, sketchy, wobbly, childish or a naive doodle. " +
+  "Character: \"Odie\", a TEENAGE girl (a teenager — slim, with longer/older proportions, NOT a small " +
+  "child) with a dark bob, straight bangs, round glasses and a simple expressive cartoon face — match " +
+  "the reference character exactly. NOT photorealistic, NOT 3D. Place her on the crinkled white lined " +
+  "NOTEBOOK PAPER (blue ruled lines, red margin) as a clean cartoon drawn on the page, Odie centered " +
+  "with room around her. Scene: ";
 
 // Locked motion prompt for Veo. Framed as animating a flat 2D cartoon DRAWING (not a
 // real person) — this keeps the doodle style AND avoids Veo's people/child RAI filter.
 export const MOTION_PROMPT =
-  "A simple flat 2D hand-drawn CARTOON crayon doodle gently animates: the little drawn figure bounces " +
-  "and sways with a playful wobble while tiny hand-drawn splashes, raindrops and scribbled details " +
-  "wiggle. It stays a flat 2D crayon illustration on lined notebook paper, exactly as in the source " +
-  "image — a child's sketch coming to life. No 3D, no photographic realism, no style change. Camera stays still.";
+  "A clean flat 2D cartoon animation (like a modern 2D animated show) gently comes to life: the " +
+  "character moves naturally with subtle, smooth motion and small shifting details. Keep the EXACT " +
+  "clean cartoon style and the lined notebook paper exactly as in the source image — it is a flat 2D " +
+  "drawing, not a real person. No 3D, no photographic realism, no style change. Camera stays still.";
 
 // Nano Banana Pro keyframe. Returns image bytes (Buffer). refImagePaths are local PNGs
 // (Odie character + art-style + notebook bg) inlined as references.
