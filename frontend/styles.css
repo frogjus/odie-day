@@ -1,38 +1,90 @@
 @import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Schoolbell&display=swap");
-:root { --ink:#1a1a2e; }
+
+:root { --ink: #1a1a2e; }
 * { box-sizing: border-box; }
+
 body {
   margin: 0; min-height: 100vh;
   background: #eee url("/assets/note_BG.png") center/cover fixed no-repeat;
   font-family: "Patrick Hand", system-ui, sans-serif; color: var(--ink);
 }
-.page { max-width: 720px; margin: 0 auto; padding: 8vh 6vw; }
+.page { max-width: 760px; margin: 0 auto; padding: 7vh 6vw; }
+
+/* 1) Title on ONE line */
 .title {
-  font-family: "Schoolbell", cursive; font-size: clamp(40px, 8vw, 76px);
-  font-style: italic; margin: 0 0 0.4em; color: #111;
+  font-family: "Schoolbell", cursive; font-style: italic;
+  font-size: clamp(30px, 6.4vw, 62px);
+  white-space: nowrap;
+  margin: 0 0 0.55em; color: #111;
   text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff,
-               4px 5px 0 rgba(0,0,0,.18); /* white sticker outline + soft shadow */
+               4px 5px 0 rgba(0, 0, 0, .18);
 }
-.day-form { display: flex; flex-direction: column; gap: 14px; }
+
+.day-form { display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
+
+/* 2) Prompt lane = real paper POST-IT (Higgsfield-generated cutout) */
+.postit {
+  position: relative;
+  width: min(430px, 92vw); aspect-ratio: 1 / 1;
+  background: url("/assets/paper/postit.png") center / 100% 100% no-repeat;
+  filter: drop-shadow(2px 7px 6px rgba(0, 0, 0, .2));
+  transform: rotate(-1.6deg);
+  padding: 20% 11% 13% 15%;   /* keep text off the curled corner (top-left) */
+}
 .day-input {
-  font-family: inherit; font-size: 22px; line-height: 34px; padding: 6px 10px;
-  background: transparent; border: none; outline: none; resize: none;
-  /* write ON the blue rules */
-  background-image: linear-gradient(transparent 33px, #9bb7e0 34px);
-  background-size: 100% 34px;
+  width: 100%; height: 100%; resize: none;
+  font-family: "Patrick Hand", cursive; font-size: 23px; line-height: 32px;
+  color: #5b5230; background: transparent; border: none; outline: none;
 }
-.go-btn, .again-btn {
-  align-self: flex-start; font-family: "Schoolbell", cursive; font-size: 24px;
-  padding: 8px 18px; cursor: pointer; color: #111;
-  background: #fff; border: 2.5px solid #111; border-radius: 14px 10px 16px 8px;
-  box-shadow: 3px 4px 0 rgba(0,0,0,.18); transition: transform .08s;
+.day-input::placeholder { color: #a99c63; }
+
+/* 3) Buttons = real torn-paper cutout */
+.paper-btn {
+  display: inline-block; border: none; cursor: pointer;
+  font-family: "Schoolbell", cursive; font-size: 23px; color: #2c2620;
+  background: url("/assets/paper/btn.png") center / 100% 100% no-repeat;
+  padding: 18px 40px; transform: rotate(-1.2deg);
+  filter: drop-shadow(2px 4px 3px rgba(0, 0, 0, .22));
+  transition: transform .08s ease, filter .08s ease;
 }
-.go-btn:active { transform: translate(2px, 3px); box-shadow: none; }
-.stage { margin-top: 28px; }
-.status-line { font-size: 22px; }
+.paper-btn:hover { transform: rotate(-1.2deg) translateY(-1px); }
+.paper-btn:active { transform: rotate(-1.2deg) translate(1px, 2px); filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, .2)); }
+.paper-btn:disabled { opacity: .55; cursor: default; transform: rotate(-1.2deg); }
+
+.stage { margin-top: 30px; }
+
+/* 6) Paper-style progress loader + timer */
+.loader { width: min(460px, 92vw); }
+.loader-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.status-line { font-size: 22px; color: #2a2a3a; }
+.timer { font-family: "Schoolbell", cursive; font-size: 19px; color: #6b6b6b; }
+.progress {
+  position: relative; width: 100%; aspect-ratio: 2431 / 580;
+  background: url("/assets/paper/loader-strip.png") center / 100% 100% no-repeat;
+  filter: drop-shadow(2px 4px 3px rgba(0, 0, 0, .2));
+}
+.progress-fill {
+  position: absolute; top: 15%; bottom: 15%; left: 1.5%; width: 5%;
+  border-radius: 5px;
+  background: repeating-linear-gradient(45deg,
+    rgba(118, 150, 210, .55) 0 9px, rgba(152, 180, 226, .55) 9px 18px);
+  transition: width .7s ease;
+}
+
+.result-line { font-size: 23px; margin: 0 0 16px; max-width: min(520px, 92vw); }
+
 .clip {
-  width: 360px; max-width: 90vw; aspect-ratio: 16/9; background: #fff;
-  border: 3px solid #111; border-radius: 6px;
-  box-shadow: 4px 6px 0 rgba(0,0,0,.2); transform: rotate(-1.4deg); /* taped sketch */
+  display: block; width: 360px; max-width: 90vw; aspect-ratio: 16 / 9;
+  background: #fff; border: 3px solid var(--ink); border-radius: 6px;
+  box-shadow: 4px 6px 0 rgba(0, 0, 0, .2); transform: rotate(-1.4deg);
 }
-.again-btn { margin-top: 16px; }
+.again-btn { margin-top: 18px; }
+
+/* 5) Sleeping-Odie decoration tucked in a corner */
+.decoration {
+  position: fixed; bottom: 14px; right: 22px;
+  width: clamp(110px, 16vw, 210px); transform: rotate(7deg);
+  pointer-events: none; z-index: 1;
+  filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, .14));
+}
+@media (max-width: 560px) { .decoration { width: 96px; opacity: .9; } }

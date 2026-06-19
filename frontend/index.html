@@ -9,17 +9,30 @@
 <body>
   <main class="page">
     <h1 class="title">Describe your day?</h1>
+
     <form id="day-form" class="day-form">
-      <textarea id="day" class="day-input" rows="3"
-        placeholder="Today I…" maxlength="280" required></textarea>
-      <button id="go" class="go-btn" type="submit">✏️ make my Odie clip</button>
+      <div class="postit">
+        <textarea id="day" class="day-input" rows="3"
+          placeholder="Today I…" maxlength="280" required></textarea>
+      </div>
+      <button id="go" class="paper-btn go-btn" type="submit">✏️ make my Odie clip</button>
     </form>
+
     <section id="stage" class="stage" hidden>
-      <p id="status-line" class="status-line"></p>
+      <div id="loader" class="loader" hidden>
+        <div class="loader-row">
+          <span id="status-line" class="status-line">Odie is getting her crayons…</span>
+          <span id="timer" class="timer">0:00</span>
+        </div>
+        <div class="progress"><div id="bar" class="progress-fill"></div></div>
+      </div>
       <video id="clip" class="clip" controls playsinline hidden></video>
-      <button id="again" class="again-btn" type="button" hidden>make another</button>
+      <p id="result-line" class="result-line" hidden></p>
+      <button id="again" class="paper-btn again-btn" type="button" hidden>make another</button>
     </section>
   </main>
+
+  <img class="decoration" src="/assets/odie-sleeping.png" alt="" aria-hidden="true" />
   <script src="/app.js"></script>
 </body>
 </html>

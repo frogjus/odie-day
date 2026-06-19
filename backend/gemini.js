@@ -7,15 +7,17 @@ const BASE = "https://generativelanguage.googleapis.com/v1beta";
 const IMAGE_MODEL = "gemini-3-pro-image";              // Nano Banana Pro
 const VIDEO_MODEL = "veo-3.1-fast-generate-preview";   // Veo 3.1 (fast), image-to-video
 
-// Locked crayon-doodle style prompt (proven). Prepended to {SCENE}.
+// Locked style prompt. Tuned to stay TRUE to Odie's original storybook art (per the
+// reference images) — clean hand-drawn outlines, less scribbly/childish than raw crayon.
 export const STYLE_PREFIX =
-  "Keep the EXACT art style and character design of the reference images: a young child's " +
-  "naive crayon-and-marker DOODLE of \"Odie\", a little girl with a dark bob and straight bangs, " +
-  "simple tiny dot eyes, a small simple nose, wobbly uneven hand-drawn black marker outlines, flat " +
-  "soft crayon coloring that scribbles slightly outside the lines. It must look hand-drawn by a kid " +
-  "— NOT realistic, NOT polished, NOT 3D, NOT a cartoon render. Draw her directly on the crinkled " +
-  "white lined NOTEBOOK PAPER (blue horizontal ruled lines and a red vertical margin line), as if a " +
-  "child sketched her in their notebook, Odie roughly centered with lots of paper around her. Scene: ";
+  "Draw in the EXACT original art style and character design of the reference images: a simple, " +
+  "charming hand-drawn children's-storybook illustration of \"Odie\", a little girl with a dark bob " +
+  "and straight bangs, simple dot eyes and a small nose. Use clean, confident hand-drawn black ink " +
+  "outlines and soft flat coloring that mostly stays within the lines — naive and sweet but TIDY, " +
+  "not scribbly, not messy crayon, not overly childish. Match her reference design exactly. NOT " +
+  "photorealistic, NOT 3D, NOT a glossy cartoon render. Draw her directly on the crinkled white lined " +
+  "NOTEBOOK PAPER (blue horizontal ruled lines and a red vertical margin line), as if sketched in a " +
+  "notebook, Odie roughly centered with lots of paper around her. Scene: ";
 
 // Locked motion prompt for Veo. Framed as animating a flat 2D cartoon DRAWING (not a
 // real person) — this keeps the doodle style AND avoids Veo's people/child RAI filter.
