@@ -94,8 +94,11 @@ The whole UI lives in the "drawn in a school notebook" world:
 - **Button:** hand-drawn doodle button ("make my Odie clip") — Higgsfield-generated
   asset in Odie's line style.
 - **Loader:** Odie-style "she's drawing your day…" doodle loop (Higgsfield/MCP).
-- **Result:** finished 16:9 clip framed like a sketch taped to the page; replay +
-  "make another."
+- **Result:** finished 16:9 clip shown small — **a little larger than thumbnail
+  size** (roughly ~320–400px wide, never full-screen / full-bleed), framed like a
+  sketch taped to the notebook page so the paper world stays the hero; click to
+  enlarge/replay, plus "make another." (The clip is still rendered at full 16:9
+  resolution; it's only *displayed* small.)
 - **Decorations:** scattered doodle stickers (stars, scribbles, paper-clip),
   Higgsfield-generated to match Odie's hand.
 
