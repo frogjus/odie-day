@@ -5,7 +5,7 @@ import fs from "node:fs";
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta";
 const IMAGE_MODEL = "gemini-3-pro-image";              // Nano Banana Pro
-const VIDEO_MODEL = "veo-3.1-fast-generate-preview";   // Veo 3.1 (fast), image-to-video
+const VIDEO_MODEL = "veo-3.1-generate-preview";        // Veo 3.1 (premium, non-fast) — cleaner frames
 
 // Locked style prompt. Tuned to stay TRUE to Odie's original storybook art (per the
 // reference images) — clean hand-drawn outlines, less scribbly/childish than raw crayon.

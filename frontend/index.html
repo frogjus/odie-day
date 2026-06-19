@@ -3,36 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Odie — Describe your day?</title>
+  <title>Odie — How was your day?</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <main class="page">
-    <h1 class="title">Describe your day?</h1>
+    <h1 class="title">How was your day?</h1>
 
-    <form id="day-form" class="day-form">
-      <div class="postit">
-        <textarea id="day" class="day-input" rows="3"
-          placeholder="Today I…" maxlength="280" required></textarea>
-      </div>
-      <button id="go" class="paper-btn go-btn" type="submit">✏️ make my Odie clip</button>
-    </form>
-
-    <section id="stage" class="stage" hidden>
-      <div id="loader" class="loader" hidden>
-        <div class="loader-row">
-          <span id="status-line" class="status-line">Odie is getting her crayons…</span>
-          <span id="timer" class="timer">0:00</span>
+    <div class="layout">
+      <form id="day-form" class="day-form">
+        <div class="postit">
+          <textarea id="day" class="day-input" rows="4"
+            placeholder="Today I…" maxlength="280" required></textarea>
         </div>
-        <div class="progress"><div id="bar" class="progress-fill"></div></div>
-      </div>
-      <video id="clip" class="clip" controls playsinline hidden></video>
-      <p id="result-line" class="result-line" hidden></p>
-      <button id="again" class="paper-btn again-btn" type="button" hidden>make another</button>
-    </section>
+        <button id="go" class="paper-btn go-btn" type="submit">✏️ make my Odie clip</button>
+      </form>
+
+      <section id="stage" class="stage" hidden>
+        <div id="loader" class="loader" hidden>
+          <div class="loader-row">
+            <span id="status-line" class="status-line">Odie is getting her crayons…</span>
+            <span id="timer" class="timer">0:00</span>
+          </div>
+          <div class="progress">
+            <div id="bar" class="progress-fill"></div>
+            <div class="progress-frame"></div>
+          </div>
+          <div class="game-wrap">
+            <canvas id="game" class="game" width="340" height="150"></canvas>
+          </div>
+        </div>
+        <video id="clip" class="clip" controls playsinline hidden></video>
+        <p id="result-line" class="result-line" hidden></p>
+        <button id="again" class="paper-btn again-btn" type="button" hidden>make another</button>
+      </section>
+    </div>
   </main>
 
+  <img class="scribble-deco" src="/assets/scribble.png" alt="" aria-hidden="true" />
+  <img class="red-figures" src="/assets/red-figures.png" alt="" aria-hidden="true" />
+  <img class="red-star" src="/assets/red-star.png" alt="" aria-hidden="true" />
+  <img class="dog-deco" src="/assets/dog.png" alt="" aria-hidden="true" />
   <img class="decoration" src="/assets/odie-sleeping.png" alt="" aria-hidden="true" />
+  <script src="/game.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

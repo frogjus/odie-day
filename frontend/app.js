@@ -10,7 +10,6 @@ const resultLine = document.getElementById("result-line");
 const again = document.getElementById("again");
 const goBtn = document.getElementById("go");
 
-// friendly copy + how full the paper progress bar is at each pipeline stage
 const STAGES = {
   queued:    { pct: 6,  copy: "Odie is getting her crayons…" },
   scripting: { pct: 22, copy: "Odie is thinking about your day…" },
@@ -20,18 +19,9 @@ const STAGES = {
   muxing:    { pct: 97, copy: "Putting it all together…" },
 };
 
-let timerId = null;
-let startMs = 0;
-
-function fmt(ms) {
-  const s = Math.floor(ms / 1000);
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-}
-function startTimer() {
-  startMs = Date.now();
-  timerEl.textContent = "0:00";
-  timerId = setInterval(() => (timerEl.textContent = fmt(Date.now() - startMs)), 1000);
-}
+let timerId = null, startMs = 0;
+const fmt = (ms) => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+function startTimer() { startMs = Date.now(); timerEl.textContent = "0:00"; timerId = setInterval(() => (timerEl.textContent = fmt(Date.now() - startMs)), 1000); }
 function stopTimer() { clearInterval(timerId); timerId = null; }
 
 function setStage(name) {
@@ -45,11 +35,11 @@ form.addEventListener("submit", async (e) => {
   const day = dayEl.value.trim();
   if (!day) return;
   goBtn.disabled = true;
-  stage.hidden = false;
-  loader.hidden = false;
+  stage.hidden = false; loader.hidden = false;
   clip.hidden = true; resultLine.hidden = true; again.hidden = true;
   setStage("queued");
   startTimer();
+  window.OdieGame && window.OdieGame.start();
   try {
     const res = await fetch("/generate", {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -59,7 +49,7 @@ form.addEventListener("submit", async (e) => {
     const { jobId } = await res.json();
     await poll(jobId);
   } catch (err) {
-    finishWithError(err.message);
+    finish(err.message, null);
   } finally {
     goBtn.disabled = false;
   }
@@ -69,27 +59,19 @@ async function poll(jobId) {
   for (;;) {
     await new Promise((r) => setTimeout(r, 2500));
     const job = await (await fetch(`/jobs/${jobId}`)).json();
-    if (job.status === "done") return finishWithClip(job);
-    if (job.status === "failed") return finishWithError(job.error || "Odie got stuck — try again!");
+    if (job.status === "done") return finish(job.line || "Here's your day!", job.mp4Url);
+    if (job.status === "failed") return finish(job.error || "Odie got stuck — try again!", null);
     setStage(job.status);
   }
 }
 
-function finishWithClip(job) {
+function finish(line, mp4Url) {
+  window.OdieGame && window.OdieGame.stop();
   stopTimer();
-  bar.style.width = "100%";
+  if (mp4Url) bar.style.width = "100%";
   loader.hidden = true;
-  resultLine.textContent = job.line || "Here's your day!";
-  resultLine.hidden = false;
-  clip.src = job.mp4Url; clip.hidden = false;
-  again.hidden = false;
-}
-
-function finishWithError(msg) {
-  stopTimer();
-  loader.hidden = true;
-  resultLine.textContent = msg;
-  resultLine.hidden = false;
+  resultLine.textContent = line; resultLine.hidden = false;
+  if (mp4Url) { clip.src = mp4Url; clip.hidden = false; }
   again.hidden = false;
 }
 

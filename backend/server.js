@@ -32,7 +32,10 @@ export function createApp({ store }) {
   });
   app.use("/clips", express.static(path.join(ROOT, "backend", "clips")));
   app.use("/assets", express.static(path.join(ROOT, "assets")));
-  app.use("/", express.static(path.join(ROOT, "frontend")));
+  // no-cache for the app shell so updated html/css/js are always served fresh
+  app.use("/", express.static(path.join(ROOT, "frontend"), {
+    setHeaders: (res) => res.setHeader("Cache-Control", "no-cache"),
+  }));
   return app;
 }
 
