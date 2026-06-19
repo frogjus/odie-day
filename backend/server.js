@@ -39,7 +39,8 @@ export function createApp({ store }) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const { config } = await (async () => {
     const { default: dotenv } = await import("dotenv");
-    dotenv.config({ path: path.join(ROOT, ".env") });
+    // override:true so the project's .env wins over any stale vars in the shell env.
+    dotenv.config({ path: path.join(ROOT, ".env"), override: true });
     return { config: loadConfig() };
   })();
   const clipsDir = path.join(ROOT, "backend", "clips");

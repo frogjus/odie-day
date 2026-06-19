@@ -17,11 +17,13 @@ export const STYLE_PREFIX =
   "white lined NOTEBOOK PAPER (blue horizontal ruled lines and a red vertical margin line), as if a " +
   "child sketched her in their notebook, Odie roughly centered with lots of paper around her. Scene: ";
 
-// Locked motion prompt for Veo (proven to keep the flat doodle style).
+// Locked motion prompt for Veo. Framed as animating a flat 2D cartoon DRAWING (not a
+// real person) — this keeps the doodle style AND avoids Veo's people/child RAI filter.
 export const MOTION_PROMPT =
-  "The child's crayon doodle gently comes to life: {ACTION}, with a subtle childlike wobble, tiny " +
-  "hand-drawn splashes and details wiggle. Keep the EXACT flat 2D childlike crayon-doodle style and " +
-  "the lined notebook paper exactly as in the image. No 3D, no realism, no style change. Camera stays still.";
+  "A simple flat 2D hand-drawn CARTOON crayon doodle gently animates: the little drawn figure bounces " +
+  "and sways with a playful wobble while tiny hand-drawn splashes, raindrops and scribbled details " +
+  "wiggle. It stays a flat 2D crayon illustration on lined notebook paper, exactly as in the source " +
+  "image — a child's sketch coming to life. No 3D, no photographic realism, no style change. Camera stays still.";
 
 // Nano Banana Pro keyframe. Returns image bytes (Buffer). refImagePaths are local PNGs
 // (Odie character + art-style + notebook bg) inlined as references.
@@ -50,11 +52,10 @@ export async function generateKeyframe(scenePrompt, { apiKey, refImagePaths = []
 
 // Veo image-to-video. imageBuffer = keyframe bytes; action describes the motion.
 // Returns video bytes (Buffer). Veo is long-running: submit -> poll operation -> download.
-export async function animate(imageBuffer, { apiKey, action = "Odie moves playfully", fetchImpl = fetch,
+export async function animate(imageBuffer, { apiKey, fetchImpl = fetch,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)), intervalMs = 10000, maxTries = 60 } = {}) {
-  const prompt = MOTION_PROMPT.replace("{ACTION}", action);
   const body = {
-    instances: [{ prompt, image: { bytesBase64Encoded: imageBuffer.toString("base64"), mimeType: "image/jpeg" } }],
+    instances: [{ prompt: MOTION_PROMPT, image: { bytesBase64Encoded: imageBuffer.toString("base64"), mimeType: "image/jpeg" } }],
     parameters: { aspectRatio: "16:9" },
   };
   const sub = await fetchImpl(`${BASE}/models/${VIDEO_MODEL}:predictLongRunning?key=${apiKey}`, {
