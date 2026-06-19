@@ -11,3 +11,4 @@ backend/jobs/
 *.mp3
 .DS_Store
 samples/
+backend/clips/
