@@ -16,11 +16,14 @@ export async function muxClip(videoUrl, mp3Buffer, outPath, { fetchImpl = fetch 
   fs.writeFileSync(vPath, Buffer.from(await res.arrayBuffer()));
   fs.writeFileSync(aPath, mp3Buffer);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
-  await pexec(ffmpegPath, [
-    "-y", "-i", vPath, "-i", aPath,
-    "-map", "0:v:0", "-map", "1:a:0",
-    "-c:v", "copy", "-c:a", "aac", "-shortest", outPath,
-  ]);
-  fs.rmSync(tmp, { recursive: true, force: true });
+  try {
+    await pexec(ffmpegPath, [
+      "-y", "-i", vPath, "-i", aPath,
+      "-map", "0:v:0", "-map", "1:a:0",
+      "-c:v", "copy", "-c:a", "aac", "-shortest", outPath,
+    ]);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
   return outPath;
 }
