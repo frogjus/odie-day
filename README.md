@@ -48,6 +48,21 @@ npm start                 # http://localhost:3000
 
 The Gemini key needs a billed/paid project (Nano Banana Pro + Veo aren't free-tier).
 
+## Deploy (always-on)
+
+The repo ships a `render.yaml` blueprint:
+
+1. Push to GitHub (done).
+2. On [Render](https://render.com): **New → Blueprint** → pick this repo (it reads `render.yaml`).
+3. Add the secret env vars in the dashboard: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`,
+   `ELEVENLABS_API_KEY`, `ODIE_VOICE_ID`. (`PORT` is injected automatically.)
+4. Deploy → you get a permanent `https://odie-day.onrender.com`-style URL.
+
+Railway works the same way (New → Deploy from repo → add the env vars; it runs `npm start`).
+
+For a quick temporary public link without deploying, run the app locally and tunnel it:
+`cloudflared tunnel --url http://localhost:3000`.
+
 ## Project layout
 
 ```

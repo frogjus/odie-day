@@ -1,0 +1,22 @@
+# Render Blueprint — one-click deploy from GitHub.
+# In Render: New → Blueprint → pick this repo. Then add the secret env vars
+# (marked sync:false) in the dashboard. Render injects PORT automatically.
+services:
+  - type: web
+    name: odie-day
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ODIE_VOICE_ID
+        sync: false
+      - key: DAILY_CLIP_CAP
+        value: "50"
