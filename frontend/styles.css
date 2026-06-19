@@ -112,7 +112,7 @@ body {
   mix-blend-mode: multiply; opacity: .9;
 }
 .red-star {
-  position: fixed; bottom: 12%; left: 30%; width: clamp(72px, 8vw, 112px);
+  position: fixed; top: 52%; left: 5%; width: clamp(72px, 8vw, 108px);
   transform: rotate(7deg); pointer-events: none; z-index: 1;
   mix-blend-mode: multiply; opacity: .9;
 }
