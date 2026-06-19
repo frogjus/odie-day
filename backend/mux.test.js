@@ -10,7 +10,7 @@ import { muxClip } from "./mux.js";
 
 const pexec = promisify(execFile);
 
-test("muxClip overlays audio onto video and writes an mp4", async () => {
+test("muxClip overlays audio onto video bytes and writes an mp4", async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "mux-"));
   const srcVideo = path.join(dir, "v.mp4");
   // 1s silent test video
@@ -21,9 +21,9 @@ test("muxClip overlays audio onto video and writes an mp4", async () => {
   await pexec(ffmpegPath, ["-f", "lavfi", "-i", "sine=frequency=440:duration=1", srcAudio]);
   const mp3 = fs.readFileSync(srcAudio);
 
-  const fetchImpl = async () => ({ ok: true, arrayBuffer: async () => videoBytes.buffer.slice(videoBytes.byteOffset, videoBytes.byteOffset + videoBytes.byteLength) });
   const out = path.join(dir, "final.mp4");
-  const res = await muxClip("https://x/v.mp4", mp3, out, { fetchImpl });
+  const res = await muxClip(videoBytes, mp3, out);
   assert.equal(res, out);
   assert.ok(fs.statSync(out).size > 0);
+  fs.rmSync(dir, { recursive: true, force: true });
 });

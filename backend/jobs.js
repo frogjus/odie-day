@@ -1,25 +1,25 @@
 import path from "node:path";
 import crypto from "node:crypto";
 
-export function createJobStore({ config, deps, clipsDir }) {
+export function createJobStore({ config, deps, clipsDir, refImagePaths = [] }) {
   const jobs = new Map();
   let dayCount = 0; // simple per-process daily cap; reset on restart
 
   async function run(job, day) {
-    const ho = { key: config.higgsKey, secret: config.higgsSecret };
+    const gemini = { apiKey: config.geminiKey };
     try {
       job.status = "scripting";
       const { line, scenePrompt } = await deps.writeScript(day, { apiKey: config.anthropicKey });
       job.line = line;
       job.status = "drawing";
-      const imageUrl = await deps.generateKeyframe(scenePrompt, ho);
+      const imageBuffer = await deps.generateKeyframe(scenePrompt, { ...gemini, refImagePaths });
       job.status = "animating";
-      const videoUrl = await deps.animate(imageUrl, ho);
+      const videoBuffer = await deps.animate(imageBuffer, { ...gemini, action: scenePrompt });
       job.status = "voicing";
       const mp3 = await deps.synthesize(line, { apiKey: config.elevenKey, voiceId: config.odieVoiceId });
       job.status = "muxing";
       const out = path.join(clipsDir, `${job.id}.mp4`);
-      await deps.muxClip(videoUrl, mp3, out);
+      await deps.muxClip(videoBuffer, mp3, out);
       job.mp4Url = `/clips/${job.id}.mp4`;
       job.status = "done";
     } catch (err) {

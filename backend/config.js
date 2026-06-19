@@ -1,6 +1,5 @@
 const REQUIRED = [
-  "ANTHROPIC_API_KEY", "ELEVENLABS_API_KEY", "ODIE_VOICE_ID",
-  "HIGGSFIELD_API_KEY", "HIGGSFIELD_API_SECRET",
+  "ANTHROPIC_API_KEY", "ELEVENLABS_API_KEY", "ODIE_VOICE_ID", "GEMINI_API_KEY",
 ];
 
 export function loadConfig(env = process.env) {
@@ -12,8 +11,7 @@ export function loadConfig(env = process.env) {
     anthropicKey: env.ANTHROPIC_API_KEY,
     elevenKey: env.ELEVENLABS_API_KEY,
     odieVoiceId: env.ODIE_VOICE_ID,
-    higgsKey: env.HIGGSFIELD_API_KEY,
-    higgsSecret: env.HIGGSFIELD_API_SECRET,
+    geminiKey: env.GEMINI_API_KEY,
     port: Number(env.PORT) || 3000,
     dailyCap: Number(env.DAILY_CLIP_CAP) || 50,
   };

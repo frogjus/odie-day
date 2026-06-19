@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { loadConfig } from "./config.js";
 import { createJobStore } from "./jobs.js";
 import { writeScript } from "./scriptwriter.js";
-import { generateKeyframe, animate } from "./higgsfield.js";
+import { generateKeyframe, animate } from "./gemini.js";
 import { synthesize } from "./voice.js";
 import { muxClip } from "./mux.js";
 
@@ -43,9 +43,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     return { config: loadConfig() };
   })();
   const clipsDir = path.join(ROOT, "backend", "clips");
+  const assetsDir = path.join(ROOT, "assets");
+  const refImagePaths = ["odie-ref-1.png", "odie-style-1.png", "note_BG.png"]
+    .map((f) => path.join(assetsDir, f));
   const store = createJobStore({
     config,
     clipsDir,
+    refImagePaths,
     deps: { writeScript, generateKeyframe, animate, synthesize, muxClip },
   });
   createApp({ store }).listen(config.port, () => console.log(`Odie Day on :${config.port}`));

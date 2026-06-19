@@ -7,12 +7,12 @@ import { createJobStore } from "./jobs.js";
 
 const deps = {
   writeScript: async () => ({ line: "Today I jumped in puddles!", scenePrompt: "girl jumping in puddles" }),
-  generateKeyframe: async () => "https://img/x.jpg",
-  animate: async () => "https://vid/y.mp4",
+  generateKeyframe: async () => Buffer.from("img"),
+  animate: async () => Buffer.from("vid"),
   synthesize: async () => Buffer.from("mp3"),
   muxClip: async (_v, _a, out) => { fs.writeFileSync(out, "MP4"); return out; },
 };
-const config = { dailyCap: 2, higgsKey: "k", higgsSecret: "s", elevenKey: "e", odieVoiceId: "v", anthropicKey: "a" };
+const config = { dailyCap: 2, geminiKey: "g", elevenKey: "e", odieVoiceId: "v", anthropicKey: "a" };
 
 test("runs the pipeline to done with an mp4Url", async () => {
   const clipsDir = fs.mkdtempSync(path.join(os.tmpdir(), "clips-"));
