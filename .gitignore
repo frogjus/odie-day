@@ -1,0 +1,12 @@
+# secrets
+.env
+.env.*
+!.env.example
+# deps & build
+node_modules/
+dist/
+# generated media
+backend/jobs/
+*.mp4
+*.mp3
+.DS_Store
