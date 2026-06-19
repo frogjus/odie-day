@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Odie — Describe your day?</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="page">
+    <h1 class="title">Describe your day?</h1>
+    <form id="day-form" class="day-form">
+      <textarea id="day" class="day-input" rows="3"
+        placeholder="Today I…" maxlength="280" required></textarea>
+      <button id="go" class="go-btn" type="submit">✏️ make my Odie clip</button>
+    </form>
+    <section id="stage" class="stage" hidden>
+      <p id="status-line" class="status-line"></p>
+      <video id="clip" class="clip" controls playsinline hidden></video>
+      <button id="again" class="again-btn" type="button" hidden>make another</button>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
