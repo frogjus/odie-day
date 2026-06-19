@@ -1,12 +1,20 @@
 const BASE = "https://platform.higgsfield.ai";
-const IMAGE_MODEL = "higgsfield-ai/soul/standard";
-const VIDEO_MODEL = "higgsfield-ai/dop/standard";
+// NOTE (Task 9 proof): the MCP proof used Nano Banana Pro (image) + Kling 3.0 Turbo
+// (video), which nail the doodle style — soul/standard + dop/standard look realistic
+// and are WRONG. Task 10 must map these to the REST catalog model_ids, pass the Odie
+// reference images, and re-smoke. See docs/style-notes.md.
+const IMAGE_MODEL = "higgsfield-ai/soul/standard"; // TODO Task 10: -> Nano Banana Pro REST id + reference images
+const VIDEO_MODEL = "higgsfield-ai/dop/standard";  // TODO Task 10: -> Kling 3.0 Turbo REST id
 
-// Locked crayon-doodle style. Finalized/tuned in Task 9.
+// Locked crayon-doodle style prompt (proven via Task 9). Prepended to {SCENE}.
 export const STYLE_PREFIX =
-  "Child's naive crayon-and-marker doodle, wobbly hand-drawn black outlines, flat soft crayon fills, " +
-  "on crinkled white lined notebook paper with blue horizontal rules and a red vertical margin line. " +
-  "Odie, a cheerful little girl with a dark bob and straight bangs, simple dot eyes, drawn in the same childlike style. Scene: ";
+  "Keep the EXACT art style and character design of the reference images: a young child's " +
+  "naive crayon-and-marker DOODLE of \"Odie\", a little girl with a dark bob and straight bangs, " +
+  "simple tiny dot eyes, a small simple nose, wobbly uneven hand-drawn black marker outlines, flat " +
+  "soft crayon coloring that scribbles slightly outside the lines. It must look hand-drawn by a kid " +
+  "— NOT realistic, NOT polished, NOT 3D, NOT a cartoon render. Draw her directly on the crinkled " +
+  "white lined NOTEBOOK PAPER (blue horizontal ruled lines and a red vertical margin line), as if a " +
+  "child sketched her in their notebook, Odie roughly centered with lots of paper around her. Scene: ";
 
 function authHeader(key, secret) { return `Key ${key}:${secret}`; }
 
