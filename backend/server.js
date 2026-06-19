@@ -51,7 +51,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   })();
   const clipsDir = path.join(ROOT, "backend", "clips");
   const assetsDir = path.join(ROOT, "assets");
-  const refImagePaths = ["odie-ref-1.png", "odie-style-1.png", "note_BG.png"]
+  const refImagePaths = ["ip/odie1.png", "ip/odie2.png", "note_BG.png"]
     .map((f) => path.join(assetsDir, f));
   const store = createJobStore({
     config,

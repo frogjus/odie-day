@@ -7,17 +7,16 @@ const BASE = "https://generativelanguage.googleapis.com/v1beta";
 const IMAGE_MODEL = "gemini-3-pro-image";              // Nano Banana Pro
 const VIDEO_MODEL = "veo-3.1-generate-preview";        // Veo 3.1 (premium, non-fast) — cleaner frames
 
-// Locked style prompt. Tuned to stay TRUE to Odie's original storybook art (per the
-// reference images) — clean hand-drawn outlines, less scribbly/childish than raw crayon.
+// Locked style prompt. Tuned to match the actual Odie IP — a clean, finished cartoon
+// (even confident inking, flat cel coloring), NOT a scribbly/crayon doodle.
 export const STYLE_PREFIX =
-  "Draw in the EXACT original art style and character design of the reference images: a simple, " +
-  "charming hand-drawn children's-storybook illustration of \"Odie\", a little girl with a dark bob " +
-  "and straight bangs, simple dot eyes and a small nose. Use clean, confident hand-drawn black ink " +
-  "outlines and soft flat coloring that mostly stays within the lines — naive and sweet but TIDY, " +
-  "not scribbly, not messy crayon, not overly childish. Match her reference design exactly. NOT " +
-  "photorealistic, NOT 3D, NOT a glossy cartoon render. Draw her directly on the crinkled white lined " +
-  "NOTEBOOK PAPER (blue horizontal ruled lines and a red vertical margin line), as if sketched in a " +
-  "notebook, Odie roughly centered with lots of paper around her. Scene: ";
+  "Draw in the EXACT art style and character design of the reference images — a clean, finished " +
+  "children's CARTOON (like a modern 2D animated show): confident, even black ink outlines, simple " +
+  "flat cel coloring, tidy and on-model. Do NOT make it scribbly, crayon, sketchy, wobbly or a rough " +
+  "naive doodle. Character: \"Odie\", a young girl with a dark bob and straight bangs, round glasses, " +
+  "and a simple friendly cartoon face — match the reference character exactly. NOT photorealistic, " +
+  "NOT 3D. Place her on the crinkled white lined NOTEBOOK PAPER (blue ruled lines, red margin) as a " +
+  "clean cartoon drawn on the page, Odie centered with room around her. Scene: ";
 
 // Locked motion prompt for Veo. Framed as animating a flat 2D cartoon DRAWING (not a
 // real person) — this keeps the doodle style AND avoids Veo's people/child RAI filter.
